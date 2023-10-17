@@ -8,7 +8,7 @@ app.use(cors());
 app.use('/', express.static('public'));
 app.use(express.json());
 let url =  "mongodb://127.0.0.1:27017/personal_budget_db";
-const budgetModel = ("./models/budgetSchema");
+const budgetModel = require("./models/budgetSchema");
 
 
 
@@ -71,10 +71,18 @@ app.post('/credit', async (req, res) => {
 });
 
 
-app.get('/budget', (req, res) => {
-  const budget = require('./budget.json');
+app.get('/budget', async(req, res) => {
+   try{
+    const data = await budgetModel.find();
+    res.json(data)
+
+  }catch(error){
+    console.log(error)
+    res.status(500).json({error: error.message})
+  }
+ /* const budget = require('./budget.json');
   res.json(budget);
-  res.json(budget)
+  res.json(budget)*/
 });
 
 
